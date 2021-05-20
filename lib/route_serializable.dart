@@ -69,7 +69,7 @@ class RouteMainGenerator extends GeneratorForAnnotation<RouteMain>{
   @override
   generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) {
     var importString = allImport.reduce((value, element) => value + element);
-    return 'import "package:flutter/material.dart";\n' + importString + "\n" + "Map<String, WidgetBuilder> allRouts = {$allBody};";
+    return 'import "package:flutter/material.dart";\n' + importString + "\n" + "Map<String, WidgetBuilder> allRoutes = {$allBody};";
   }
 
 }
