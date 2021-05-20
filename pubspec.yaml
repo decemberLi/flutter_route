@@ -1,7 +1,6 @@
 name: yyy_route_annotation
 description: Provide a route generator to create route map quickly by annotations.
 version: 0.0.1
-author: december
 homepage: https://github.com/december/yyy_route_annotation
 
 environment:
@@ -13,6 +12,7 @@ dependencies:
     sdk: flutter
   build: ^2.0.0
   source_gen: ^1.0.0
+  analyzer: ^1.5.0
 
 dev_dependencies:
   flutter_test:

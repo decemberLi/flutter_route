@@ -32,6 +32,13 @@ void main() {
   runApp(MyApp());
 }
 
+```
+
+```
+flutter packages pub run build_runner build
+```
+
+```dart
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,9 +52,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 ```
-
 ### Push
 ```dart
 RouteManager.push(context,"yyy://page/xxx?xx=xx&xx=xx");
