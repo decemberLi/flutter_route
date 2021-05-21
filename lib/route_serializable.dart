@@ -2,24 +2,23 @@ library yyy_route_annotation;
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-// ignore: implementation_imports
-import 'package:source_gen/src/generator_for_annotation.dart';
-// ignore: implementation_imports
-import 'package:source_gen/src/constants/reader.dart';
-// ignore: implementation_imports
-import 'package:source_gen/src/builder.dart';
+import 'package:source_gen/source_gen.dart';
 
+/// page file
 class RoutePage {
   const RoutePage();
 }
 
+/// main file
 class RouteMain {
   const RouteMain();
 }
 
-String allPages = "";
+String _allBody = "";
+Set<String> _allImport = {};
 
-class PageGenerator extends GeneratorForAnnotation<RoutePage> {
+/// page generator
+class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
   @override
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
@@ -61,37 +60,36 @@ class PageGenerator extends GeneratorForAnnotation<RoutePage> {
    }
     """;
     }
-    allBody += """ 
+    _allBody += """ 
 "$key": (context){
 $argsIntro
    return ${element.name}$args;
 }, 
 """;
-    allImport.add('import "${buildStep.inputId.uri}";\n');
+    _allImport.add('import "${buildStep.inputId.uri}";\n');
     return "";
   }
 }
-
-class RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
+/// main generator
+class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
   @override
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    var importString = allImport.reduce((value, element) => value + element);
+    var importString = _allImport.reduce((value, element) => value + element);
     return 'import "package:flutter/material.dart";\n' +
         importString +
         "\n" +
-        "Map<String, WidgetBuilder> allRoutes = {$allBody};";
+        "Map<String, WidgetBuilder> allRoutes = {$_allBody};";
   }
 }
-
-String allBody = "";
-Set<String> allImport = {};
+/// build page string
 Builder routePageSerializable(BuilderOptions options) {
-  allBody = "";
-  allImport = {};
-  return LibraryBuilder(PageGenerator(), generatedExtension: ".page.dart");
+  _allBody = "";
+  _allImport = {};
+  return LibraryBuilder(_PageGenerator(), generatedExtension: ".page.dart");
 }
 
+/// build main file
 Builder routeSerializable(BuilderOptions options) {
-  return LibraryBuilder(RouteMainGenerator(), generatedExtension: ".all.dart");
+  return LibraryBuilder(_RouteMainGenerator(), generatedExtension: ".all.dart");
 }
