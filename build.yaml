@@ -1,13 +1,13 @@
 builders:
   routeSerializable:
-    import: 'package:yyy_route_annotation/route_serializable.dart'
+    import: 'package:yyy_route_annotation/src/route_serializable.dart'
     builder_factories: ["routeSerializable"]
     build_extensions: {".dart": [".all.dart"]}
     auto_apply: root_package
     build_to: source
 
   routePageSerializable:
-    import: 'package:yyy_route_annotation/route_serializable.dart'
+    import: 'package:yyy_route_annotation/src/route_serializable.dart'
     builder_factories: ["routePageSerializable"]
     build_extensions: {".dart": [".page.dart"]}
     auto_apply: root_package
