@@ -1,6 +1,6 @@
 name: yyy_route_annotation
 description: Provide a route generator to create route map quickly by annotations.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/decemberLi/yyy_route_annotation
 
 environment:
