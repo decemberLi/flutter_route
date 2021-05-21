@@ -1,3 +1,9 @@
+## yyy_route_annotation
+
+Provide a route generator to create route map quickly by annotations.
+
+When you receive a notification or deep link, you can use url to jump to each page.
+
 ## Usage
 
 ### Add packages to dependencies
