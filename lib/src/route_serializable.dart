@@ -27,9 +27,9 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
       args = "(";
       constructor?.parameters.forEach((element) {
         if (element.isNamed) {
-          args += '${element.name}:args["${element.name}"],';
+          args += '${element.name}:_format(args["${element.name}"],${element.type}),';
         } else {
-          args += 'args["${element.name}"],';
+          args += '_format(args["${element.name}"],${element.type}),';
         }
       });
       args += ")";
@@ -46,8 +46,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
    Map<String,dynamic>? from = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic>?;
    if (from != null){
     args = from;
-   }
-    """;
+   }""";
     }
     _allBody += """ 
 "$key": (context){
@@ -69,7 +68,20 @@ class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
     return 'import "package:flutter/material.dart";\n' +
         importString +
         "\n" +
-        "Map<String, WidgetBuilder> allRoutes = {$_allBody};";
+        "Map<String, WidgetBuilder> allRoutes = {$_allBody};\n\n" +
+        """
+_format(dynamic value,Type to){
+  var from = value.runtimeType;
+  if (from == String){
+    if (to == int){
+      return int.parse(value);
+    }else if (to == double){
+      return double.parse(value);
+    }
+  }
+  return value;
+}
+    """;
   }
 }
 
