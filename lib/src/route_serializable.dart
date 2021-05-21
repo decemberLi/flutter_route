@@ -27,7 +27,8 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
       args = "(";
       constructor?.parameters.forEach((element) {
         if (element.isNamed) {
-          args += '${element.name}:_format(args["${element.name}"],${element.type}),';
+          args +=
+              '${element.name}:_format(args["${element.name}"],${element.type}),';
         } else {
           args += '_format(args["${element.name}"],${element.type}),';
         }
