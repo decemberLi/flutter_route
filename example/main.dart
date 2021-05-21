@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:yyy_route_annotation/route_serializable.dart';
 import 'main.all.dart';
@@ -12,11 +11,11 @@ class TestPge extends StatelessWidget {
 }
 
 @RouteMain()
-void main(){
+void main() {
   runApp(Home());
 }
 
-class Home extends StatelessWidget{
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
