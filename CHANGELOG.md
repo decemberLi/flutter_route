@@ -1,5 +1,5 @@
 
-#### [0.0.2] - 2020/05/21.
+### [0.0.2] - 2020/05/21.
 
 * update package description.
 * add example.
