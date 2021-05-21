@@ -1,18 +1,7 @@
-library yyy_route_annotation;
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
-
-/// page file
-class RoutePage {
-  const RoutePage();
-}
-
-/// main file
-class RouteMain {
-  const RouteMain();
-}
+import 'route_annotation.dart';
 
 String _allBody = "";
 Set<String> _allImport = {};
@@ -70,6 +59,7 @@ $argsIntro
     return "";
   }
 }
+
 /// main generator
 class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
   @override
@@ -82,6 +72,7 @@ class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
         "Map<String, WidgetBuilder> allRoutes = {$_allBody};";
   }
 }
+
 /// build page string
 Builder routePageSerializable(BuilderOptions options) {
   _allBody = "";

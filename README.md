@@ -10,7 +10,9 @@ Add the package to `dependencies` in your project/packages's `pubspec.yaml`
 environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies:
-  yyy_route_annottion: ^0.0.1
+  yyy_route_annotation: ^0.0.2
+dev_dependencies:
+  build_runner: ^2.0.0
 ``` 
 
 Download with `flutter packages get`
@@ -55,5 +57,5 @@ class MyApp extends StatelessWidget {
 ```
 ### Push
 ```dart
-RouteManager.push(context,"yyy://page/xxx?xx=xx&xx=xx");
+RouteManager.push(context,"yyy://page/one_page?paramOne=xx&two=xx");
 ```

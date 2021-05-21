@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// RouteMainGenerator
+// _RouteMainGenerator
 // **************************************************************************
 
 import "package:flutter/material.dart";

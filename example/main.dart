@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yyy_route_annotation/route_serializable.dart';
+import 'package:yyy_route_annotation/yyy_route_annotation.dart';
 import 'main.all.dart';
 
 @RoutePage()
