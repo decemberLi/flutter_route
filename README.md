@@ -59,3 +59,4 @@ class MyApp extends StatelessWidget {
 ```dart
 RouteManager.push(context,"yyy://page/one_page?param_one=xx&two=xx");
 ```
+url params use '_' and dart class params use 'Camel Case'.
