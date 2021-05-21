@@ -57,5 +57,5 @@ class MyApp extends StatelessWidget {
 ```
 ### Push
 ```dart
-RouteManager.push(context,"yyy://page/one_page?paramOne=xx&two=xx");
+RouteManager.push(context,"yyy://page/one_page?param_one=xx&two=xx");
 ```
