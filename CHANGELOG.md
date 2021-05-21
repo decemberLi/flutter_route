@@ -1,3 +1,6 @@
+## [0.0.4] - 2020/05/21.
+
+* url params use '_' and dart class params use 'Camel Case'
 
 ## [0.0.3] - 2020/05/21.
 
