@@ -28,34 +28,43 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
       constructor?.parameters.forEach((element) {
         if (element.isNamed) {
           args +=
-              '${element.name}:_format(args["${element.name}"],${element.type}),';
+              '${element.name}:typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
         } else {
-          args += '_format(args["${element.name}"],${element.type}),';
+          args +=
+              'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
         }
       });
       args += ")";
       needArgs = args.length > 2;
     }
     RegExp rule = RegExp(r"[A-Z]");
+    var needLogin = annotation.read("needLogin").boolValue;
+    var needAuth = annotation.read("needAuth").boolValue;
+
     var key = element.name
         ?.replaceAllMapped(rule, (Match m) => "_${m[0]?.toLowerCase()}");
     key = key?.replaceFirst("_", "");
+    if(!annotation.read("name").isNull) {
+      key = annotation.read("name").stringValue;
+    }
     var argsIntro = "";
     if (needArgs) {
       argsIntro = """
    Map<String,dynamic> args = {};
-   Map<String,dynamic>? from = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic>?;
+   Map<String,dynamic> from = ModalRoute.of(context).settings.arguments as Map<String,dynamic>;
    if (from != null){
     args = from;
    }""";
     }
     _allBody += """ 
-"$key": (context){
+"$key": MRouteAware((context){
 $argsIntro
    return ${element.name}$args;
-}, 
+},$needLogin, $needAuth), 
 """;
     _allImport.add('import "${buildStep.inputId.uri}";\n');
+    _allImport
+        .add('import "package:yyy_route_annotation/yyy_route_annotation.dart";');
     return "";
   }
 }
@@ -69,20 +78,10 @@ class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
     return 'import "package:flutter/material.dart";\n' +
         importString +
         "\n" +
-        "Map<String, WidgetBuilder> allRoutes = {$_allBody};\n\n" +
-        """
-_format(dynamic value,Type to){
-  var from = value.runtimeType;
-  if (from == String){
-    if (to == int){
-      return int.parse(value);
-    }else if (to == double){
-      return double.parse(value);
-    }
-  }
-  return value;
-}
-    """;
+        "Map<String, WidgetBuilder> routes(){\n"+
+        "routeMapping.addAll({$_allBody});\n"+
+        "return routeMapping.map((key, value) => MapEntry(key, value.widgetBuilder));"
+        "}\n\n";
   }
 }
 

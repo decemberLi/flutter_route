@@ -1,6 +1,12 @@
 /// page file
 class RoutePage {
-  const RoutePage();
+
+  final bool needLogin;
+  final bool needAuth;
+  final String? name;
+
+  const RoutePage({this.needLogin = false, this.needAuth = false, this.name = null});
+
 }
 
 /// main file
