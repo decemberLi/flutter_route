@@ -1,4 +1,7 @@
 typeConvert(dynamic value, Type to) {
+  if (value == null) {
+    return null;
+  }
   var from = value.runtimeType;
   if (from == String) {
     if (to == int) {
