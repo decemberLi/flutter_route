@@ -5,6 +5,7 @@ import 'route_annotation.dart';
 
 String _allBody = "";
 Set<String> _allImport = {};
+String _allInterface = "";
 
 /// page generator
 class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
@@ -12,7 +13,9 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
     var args = "()";
+    var interfaceArgs="()";
     bool needArgs = false;
+    String urlParam = "";
     if (element is ClassElement) {
       ConstructorElement? constructor;
       try {
@@ -25,15 +28,26 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
         } catch (e) {}
       }
       args = "(";
+      interfaceArgs="(";
+      bool hasNameArg = false;
+      String namedArg = "";
       constructor?.parameters.forEach((element) {
         if (element.isNamed) {
           args +=
               '${element.name}:typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
+          namedArg+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
+          hasNameArg = true;
         } else {
           args +=
               'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
+          interfaceArgs+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
         }
+        urlParam+="${element.name}=${element.name}&";
       });
+      if(hasNameArg){
+        interfaceArgs+="{$namedArg}";
+      }
+      interfaceArgs+=")";
       args += ")";
       needArgs = args.length > 2;
     }
@@ -51,7 +65,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
     if (needArgs) {
       argsIntro = """
    Map<String,dynamic> args = {};
-   Map<String,dynamic> from = ModalRoute.of(context).settings.arguments as Map<String,dynamic>;
+   Map<String,dynamic> from = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
    if (from != null){
     args = from;
    }""";
@@ -62,6 +76,11 @@ $argsIntro
    return ${element.name}$args;
 },$needLogin, $needAuth), 
 """;
+    _allInterface += """ 
+    static $key$interfaceArgs{
+    return "yyy://page/$key?$urlParam";
+    }
+    """;
     _allImport.add('import "${buildStep.inputId.uri}";\n');
     _allImport
         .add('import "package:yyy_route_annotation/yyy_route_annotation.dart";');
@@ -74,14 +93,21 @@ class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
   @override
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    var importString = _allImport.reduce((value, element) => value + element);
+    String value = "";
+    _allImport.forEach((element) {
+      value += element;
+    });
+    var importString = value;
     return 'import "package:flutter/material.dart";\n' +
+        'import "package:yyy_route_annotation/yyy_route_annotation.dart";\n'+
         importString +
         "\n" +
         "Map<String, WidgetBuilder> routes(){\n"+
         "routeMapping.addAll({$_allBody});\n"+
         "return routeMapping.map((key, value) => MapEntry(key, value.widgetBuilder));"
-        "}\n\n";
+        "}\n\n"+
+        "class RoutMapping{$_allInterface}"
+    ;
   }
 }
 

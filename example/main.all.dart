@@ -5,10 +5,15 @@
 // **************************************************************************
 
 import "package:flutter/material.dart";
-import "main.dart";
+import "package:yyy_route_annotation/yyy_route_annotation.dart";
 
-Map<String, WidgetBuilder> allRoutes = {
-  "test_pge": (context) {
-    return TestPge();
-  },
-};
+import 'main.dart';
+
+Map<String, WidgetBuilder> routes() {
+  routeMapping.addAll({
+    "test_pge": MRouteAware((context) {
+      return TestPge();
+    }, false, false),
+  });
+  return routeMapping.map((key, value) => MapEntry(key, value.widgetBuilder));
+}

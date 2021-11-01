@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "RouteTest",
-      routes: allRoutes,
+      routes: routes(),
     );
   }
 }
