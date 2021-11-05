@@ -34,15 +34,15 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
       constructor?.parameters.forEach((element) {
         if (element.isNamed) {
           args +=
-              '${element.name}:typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
+          '${element.name}:typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
           namedArg+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
           hasNameArg = true;
         } else {
           args +=
-              'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
+          'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
           interfaceArgs+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
         }
-        urlParam+="${element.name}=\$${element.name}&";
+        urlParam+="${element.name}=${element.name}&";
       });
       if(hasNameArg){
         interfaceArgs+="{$namedArg}";
@@ -58,8 +58,10 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
     var key = element.name
         ?.replaceAllMapped(rule, (Match m) => "_${m[0]?.toLowerCase()}");
     key = key?.replaceFirst("_", "");
+    String urlKey = key??"";
     if(!annotation.read("name").isNull) {
       key = annotation.read("name").stringValue;
+      urlKey = key.replaceAllMapped(rule, (Match m) => "_${m[0]?.toLowerCase()}");
     }
     var argsIntro = "";
     if (needArgs) {
@@ -78,7 +80,7 @@ $argsIntro
 """;
     _allInterface += """ 
     static $key$interfaceArgs{
-    return "yyy://page/$key?$urlParam";
+    return "yyy://page/$urlKey?$urlParam";
     }
     """;
     _allImport.add('import "${buildStep.inputId.uri}";\n');
@@ -105,7 +107,7 @@ class _RouteMainGenerator extends GeneratorForAnnotation<RouteMain> {
         "Map<String, WidgetBuilder> routes(){\n"+
         "routeMapping.addAll({$_allBody});\n"+
         "return routeMapping.map((key, value) => MapEntry(key, value.widgetBuilder));"
-        "}\n\n"+
+            "}\n\n"+
         "class RoutMapping{$_allInterface}"
     ;
   }
