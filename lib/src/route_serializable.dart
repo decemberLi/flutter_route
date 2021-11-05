@@ -73,7 +73,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
    }""";
     }
     _allBody += """ 
-"$key": MRouteAware((context){
+"$urlKey": MRouteAware((context){
 $argsIntro
    return ${element.name}$args;
 },$needLogin, $needAuth), 
