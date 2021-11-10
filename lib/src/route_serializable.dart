@@ -42,7 +42,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
           'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
           interfaceArgs+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
         }
-        urlParam+="${element.name}=${element.name}&";
+        urlParam+="${element.name}=\$${element.name}&";
       });
       if(hasNameArg){
         interfaceArgs+="{$namedArg}";
