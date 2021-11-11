@@ -93,7 +93,7 @@ $argsIntro
     List<String> paramList = [];
     param.forEach((eachKey, eachValue) {
       if(eachValue != null) {
-        paramList.add('\$eachKey=\$eachValue');
+        paramList.add('"\$eachKey"=\$eachValue');
       }
     });
     String paramStr = paramList.join('&');
