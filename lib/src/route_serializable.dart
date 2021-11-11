@@ -15,7 +15,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
     var args = "()";
     var interfaceArgs="()";
     bool needArgs = false;
-    String urlParam = "";
+    Map<String, dynamic> paramMap = {};
     if (element is ClassElement) {
       ConstructorElement? constructor;
       try {
@@ -42,7 +42,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
           'typeConvert(args["${element.name}"],${element.type.getDisplayString(withNullability: false)}),';
           interfaceArgs+= "${element.type.getDisplayString(withNullability: true)} ${element.name},";
         }
-        urlParam+="${element.name}=\$${element.name}&";
+        paramMap['${element.name}'] = '${element.name}';
       });
       if(hasNameArg){
         interfaceArgs+="{$namedArg}";
@@ -63,6 +63,14 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
       key = annotation.read("name").stringValue;
       urlKey = key.replaceAllMapped(rule, (Match m) => "_${m[0]?.toLowerCase()}");
     }
+    String pMap= """ 
+    Map<String,dynamic> param = <String,dynamic>{
+    """;
+    paramMap.forEach((oKey, oValue) {
+      pMap += '\n$oKey:$oValue,';
+    });
+    pMap += "\n};";
+
     var argsIntro = "";
     if (needArgs) {
       argsIntro = """
@@ -80,7 +88,16 @@ $argsIntro
 """;
     _allInterface += """ 
     static $key$interfaceArgs{
-    return "yyy://page/$urlKey?$urlParam";
+    $pMap
+    
+    List<String> paramList = [];
+    param.forEach((eachKey, eachValue) {
+      if(value != null) {
+        paramList.add('\$eachKey=\$eachValue');
+      }
+    });
+    String paramStr = paramList.join('&');
+    return "yyy://page/$urlKey?\$paramStr";
     }
     """;
     _allImport.add('import "${buildStep.inputId.uri}";\n');
