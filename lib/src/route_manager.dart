@@ -53,7 +53,7 @@ class RouteManager {
   /// push to page
   /// context is current context
   static Future<RouteResult> push(BuildContext context, String url,
-      {RouteInterceptor? routeInterceptor}) async {
+      {RouteInterceptor? routeInterceptor,bool replace = false}) async {
     var uri = Uri.parse(url);
     if (uri.scheme != "yyy") {
       return RouteResult.failure();
@@ -87,12 +87,21 @@ class RouteManager {
         }
 
         if (routeInterceptor == null) {
-          return _doPush(context, path, args);
+          if (replace){
+            return _replace(context, path, args);
+          }else{
+            return _doPush(context, path, args);
+          }
+
         }
 
         /// true is continue exec push logic, otherwise will be break
         if (await routeInterceptor(context)) {
-          return _doPush(context, path, args);
+          if (replace){
+            return _replace(context, path, args);
+          }else{
+            return _doPush(context, path, args);
+          }
         }
     }
     return RouteResult.failure();
@@ -101,6 +110,12 @@ class RouteManager {
   static Future<RouteResult> _doPush(
       BuildContext context, String path, Map<String, String> args) async {
     var result = await Navigator.of(context).pushNamed(path, arguments: args);
+    return RouteResult.success(result);
+  }
+
+  static Future<RouteResult> _replace(
+      BuildContext context, String path, Map<String, String> args) async {
+    var result = await Navigator.of(context).pushReplacementNamed(path,arguments: args);
     return RouteResult.success(result);
   }
 }
