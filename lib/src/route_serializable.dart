@@ -67,7 +67,7 @@ class _PageGenerator extends GeneratorForAnnotation<RoutePage> {
     Map<String,dynamic> param = <String,dynamic>{
     """;
     paramMap.forEach((oKey, oValue) {
-      pMap += '\n$oKey:$oValue,';
+      pMap += '\n"$oKey":$oValue,';
     });
     pMap += "\n};";
 
