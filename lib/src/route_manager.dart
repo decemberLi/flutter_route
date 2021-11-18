@@ -115,7 +115,7 @@ class RouteManager {
 
   static Future<RouteResult> _replace(
       BuildContext context, String path, Map<String, String> args) async {
-    var result = await Navigator.of(context).pushReplacementNamed(path,arguments: args);
+    var result = await Navigator.of(context).pushNamedAndRemoveUntil(path, (route) => false , arguments: args);
     return RouteResult.success(result);
   }
 }
