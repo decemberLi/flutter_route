@@ -6,7 +6,7 @@ import '../yyy_route_annotation.dart';
 ///
 /// Custom interceptor
 ///
-typedef RouteInterceptor = Future<dynamic> Function(BuildContext context);
+typedef RouteInterceptor = Future<dynamic> Function(BuildContext context,String path);
 
 ///
 /// User Loginning status check
@@ -42,7 +42,7 @@ class RouteManager {
     return Future.value(false);
   };
 
-  static RouteInterceptor _routeInterceptor = (ctx) {
+  static RouteInterceptor _routeInterceptor = (ctx,path) {
     return Future.value(true);
   };
 
@@ -100,7 +100,7 @@ class RouteManager {
         }
 
         /// true is continue exec push logic, otherwise will be break
-        if (await routeInterceptor(context)) {
+        if (await routeInterceptor(context,path)) {
           if (replace){
             return _replace(context, path, args);
           }else{
