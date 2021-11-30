@@ -42,6 +42,10 @@ class RouteManager {
     return Future.value(false);
   };
 
+  static RouteInterceptor _routeInterceptor = (ctx) {
+    return Future.value(true);
+  };
+
   static void commonLoginInterceptor(LoginInterceptor interceptor) {
     _loginInterceptor = interceptor;
   }
@@ -50,10 +54,15 @@ class RouteManager {
     _authenticInterceptor = interceptor;
   }
 
+  static void routeInterceptor(RouteInterceptor interceptor) {
+    _routeInterceptor = interceptor;
+  }
+
   /// push to page
   /// context is current context
   static Future<RouteResult> push(BuildContext context, String url,
       {RouteInterceptor? routeInterceptor,bool replace = false}) async {
+
     var uri = Uri.parse(url);
     if (uri.scheme != "yyy") {
       return RouteResult.failure();
@@ -86,13 +95,8 @@ class RouteManager {
           return RouteResult.failure();
         }
 
-        if (routeInterceptor == null) {
-          if (replace){
-            return _replace(context, path, args);
-          }else{
-            return _doPush(context, path, args);
-          }
-
+        if (routeInterceptor == null){
+          routeInterceptor = _routeInterceptor;
         }
 
         /// true is continue exec push logic, otherwise will be break
