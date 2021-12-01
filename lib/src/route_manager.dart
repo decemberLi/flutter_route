@@ -107,6 +107,12 @@ class RouteManager {
             return _doPush(context, path, args);
           }
         }
+        break;
+      default:
+        if (routeInterceptor == null){
+          routeInterceptor = _routeInterceptor;
+        }
+        await routeInterceptor(context,url);
     }
     return RouteResult.failure();
   }
